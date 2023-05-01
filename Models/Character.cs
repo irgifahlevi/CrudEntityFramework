@@ -8,7 +8,7 @@ namespace CrudEntityFramework.Models
 {
     public class Character
     {
-        // [Key]
+        [Key]
         public int Id { get; set; }
         public string Name { get; set; } = "Frodo";
         public int HitsPoints { get; set; } = 100;

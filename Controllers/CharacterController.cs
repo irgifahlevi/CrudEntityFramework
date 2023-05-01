@@ -30,5 +30,12 @@ namespace CrudEntityFramework.Controllers
             var character = characters.Where(p => p.Id == id).FirstOrDefault();
             return Ok(character);
         }
+
+        [HttpPost]
+        public ActionResult<List<Character>> CreateCharacter(Character character)
+        {
+            characters.Add(character);
+            return Ok(characters);
+        }
     }
 }
