@@ -8,8 +8,8 @@ namespace CrudEntityFramework.Services.CharacterServices
 {
     public interface ICharacterService
     {
-        List<Character> GetAllCharacters();
-        Character GetCharacterById(int id);
-        List<Character> AddCharacter(Character character);
+        Task<ServiceResponse<List<Character>>> GetAllCharacters();
+        Task<ServiceResponse<Character>> GetCharacterById(int id);
+        Task<ServiceResponse<List<Character>>> AddCharacter(Character character);
     }
 }

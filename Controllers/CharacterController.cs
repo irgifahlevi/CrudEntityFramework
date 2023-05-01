@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CrudEntityFramework.Models;
+using CrudEntityFramework.Services.CharacterServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CrudEntityFramework.Controllers
@@ -11,31 +12,39 @@ namespace CrudEntityFramework.Controllers
     [Route("api/[controller]")]
     public class CharacterController : ControllerBase
     {
-        private static List<Character> characters = new List<Character> {
-            new Character (),
-            new Character {Id = 1, Name = "Cyclops"},
-            new Character {Id = 2, Name = "Hayabusa", Class = RpgClass.Mage},
-        };
+        private readonly ICharacterService _characterService;
 
+        public CharacterController(ICharacterService characterService)
+        {
+            _characterService = characterService;
+        }
 
         [HttpGet]
-        public ActionResult<List<Character>> Get()
+        public async Task<ActionResult<ServiceResponse<List<Character>>>> Get()
         {
+            var characters = await _characterService.GetAllCharacters();
             return Ok(characters);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<List<Character>> GetById(int id)
+        public async Task<ActionResult<ServiceResponse<Character>>> GetById(int id)
         {
-            var character = characters.Where(p => p.Id == id).FirstOrDefault();
-            return Ok(character);
+            try
+            {
+                var character = await _characterService.GetCharacterById(id);
+                return Ok(character);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpPost]
-        public ActionResult<List<Character>> CreateCharacter(Character character)
+        public async Task<ActionResult<ServiceResponse<List<Character>>>> CreateCharacter(Character character)
         {
-            characters.Add(character);
-            return Ok(characters);
+            var createCharacter = await _characterService.AddCharacter(character);
+            return Ok(createCharacter);
         }
     }
 }
